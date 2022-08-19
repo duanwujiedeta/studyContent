@@ -43,6 +43,7 @@
             throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
         }
     }
+    /* TODO: Fiber对应的 tag 属性类型 */
     var FunctionComponent = 0;
     var ClassComponent = 1;
     var IndeterminateComponent = 2;
@@ -68,6 +69,8 @@
     var Block = 22;
     var OffscreenComponent = 23;
     var LegacyHiddenComponent = 24;
+
+
     var enableProfilerTimer = true;
     var enableFundamentalAPI = false;
     var enableNewReconciler = false;
@@ -3569,6 +3572,8 @@
             }
         }
     }
+
+    /* TODO：用来获取不同类型事件的三个枚举值 */
     var DiscreteEvent = 0;
     var UserBlockingEvent = 1;
     var ContinuousEvent = 2;
@@ -3642,7 +3647,7 @@
             eventPriorities.set(eventTypes[i], priority);
         }
     }
-
+    /* TODO：事件的priority，属性，在内置的框架运行的时候传入，用来定义事件类型，不同类型会有不同的回调函数 */
     function getEventPriorityForPluginSystem(domEventName) {
         var priority = eventPriorities.get(domEventName);
         return priority === undefined ? ContinuousEvent : priority;
@@ -4262,7 +4267,7 @@
     function isEnabled() {
         return _enabled;
     }
-
+    /* TODO：根据事件名称，生成每种事件的回调函数 */
     function createEventListenerWrapperWithPriority(targetContainer, domEventName, eventSystemFlags) {
         var eventPriority = getEventPriorityForPluginSystem(domEventName);
         var listenerWrapper;
@@ -4354,17 +4359,17 @@
         dispatchEventForPluginEventSystem(domEventName, eventSystemFlags, nativeEvent, targetInst, targetContainer);
         return null;
     }
-
+    /* TODO：以冒泡形式进行事件监听 */
     function addEventBubbleListener(target, eventType, listener) {
         target.addEventListener(eventType, listener, false);
         return listener;
     }
-
+    /* TODO：以捕获形式进行事件监听，捕获是由顶部向下面 */
     function addEventCaptureListener(target, eventType, listener) {
         target.addEventListener(eventType, listener, true);
         return listener;
     }
-
+    /* TODO：以捕获、passive两种形式进行事件监听，passive是不会阻止事件的默认行为的 */
     function addEventCaptureListenerWithPassiveFlag(target, eventType, listener, passive) {
         target.addEventListener(eventType, listener, {
             capture: true,
@@ -4372,7 +4377,7 @@
         });
         return listener;
     }
-
+    /* TODO：以passive形式进行事件监听 */
     function addEventBubbleListenerWithPassiveFlag(target, eventType, listener, passive) {
         target.addEventListener(eventType, listener, {
             passive: passive
@@ -5776,7 +5781,7 @@
         }
     }
     var listeningMarker = '_reactListening' + Math.random().toString(36).slice(2);
-
+    /* TODO：如果没有执行过，则执行监听逻辑 */
     function listenToAllSupportedEvents(rootContainerElement) {
         {
             if (rootContainerElement[listeningMarker]) {
@@ -5791,7 +5796,9 @@
             });
         }
     }
-
+    /* TODO：为顶部元素添加监听事件
+    如果不存在被监听的记录，则执行监听动作
+    */
     function listenToNativeEvent(domEventName, isCapturePhaseListener, rootContainerElement, targetElement) {
         var eventSystemFlags = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
         var target = rootContainerElement;
@@ -5815,7 +5822,7 @@
             listenerSet.add(listenerSetKey);
         }
     }
-
+    /* TODO：提供dom元素、事件名、是否捕获等，获取内置的已设置好的回调函数，进行事件监听 */
     function addTrappedEventListener(targetContainer, domEventName, eventSystemFlags, isCapturePhaseListener, isDeferredListenerForLegacyFBSupport) {
         var listener = createEventListenerWrapperWithPriority(targetContainer, domEventName, eventSystemFlags);
         var isPassiveListener = undefined;
@@ -6046,7 +6053,7 @@
             accumulateEnterLeaveListenersForEvent(dispatchQueue, enterEvent, to, common, true);
         }
     }
-
+    /* TODO：用事件名来组成一个字符串 */
     function getListenerSetKey(domEventName, capture) {
         return domEventName + "__" + (capture ? 'capture' : 'bubble');
     }
@@ -7480,6 +7487,7 @@
         node[internalInstanceKey] = hostInst;
     }
 
+    /* TODO：为dom元素设置`internalContainerInstanceKey`，属性 */
     function markContainerAsRoot(hostRoot, node) {
         node[internalContainerInstanceKey] = hostRoot;
     }
@@ -7487,7 +7495,7 @@
     function unmarkContainerAsRoot(node) {
         node[internalContainerInstanceKey] = null;
     }
-
+    /* TODO: 判断一个DOM类型是否含有 `internalContainerInstanceKye`属性 */
     function isContainerMarkedAsRoot(node) {
         return !!node[internalContainerInstanceKey];
     }
@@ -7550,6 +7558,7 @@
         node[internalPropsKey] = props;
     }
 
+    /* TODO：为每次运行都生成一个不同的属性绑定在DOM的属性上 */
     function getEventListenerSet(node) {
         var elementListenerSet = node[internalEventHandlersKey];
         if (elementListenerSet === undefined) {
@@ -7821,6 +7830,8 @@
             }
         }
     }
+
+    /* TODO：创建 `ReactDOMBlockingRoot`对象类型的`tag` */
     var LegacyRoot = 0;
     var BlockingRoot = 1;
     var ConcurrentRoot = 2;
@@ -7934,6 +7945,7 @@
     var immediateQueueCallbackNode = null;
     var isFlushingSyncQueue = false;
     var initialTimeMs$1 = Scheduler_now$1();
+    /* TODO：now是`React`库中的一个方法，借助`performance`来生成一个时间 */
     var now = initialTimeMs$1 < 10000 ? Scheduler_now$1 : function () {
         return Scheduler_now$1() - initialTimeMs$1
     };
@@ -8148,7 +8160,7 @@
             }
         }
     }
-
+    /* TODO：给performance记录一个点，生成对应的字符串 */
     function markRenderScheduled(lane) {
         {
             if (supportsUserTiming) {
@@ -8595,7 +8607,7 @@
         didWarnUpdateInsideUpdate = false;
         currentlyProcessingQueue = null
     }
-
+    /* TODO：为一个FiberNode对象添加`updateQueue`属性 */
     function initializeUpdateQueue(fiber) {
         var queue = {
             baseState: fiber.memoizedState,
@@ -8635,7 +8647,7 @@
         };
         return update
     }
-
+    /* TODO：生成xxx.current的pending.updateQueue.shared.pending的属性 */
     function enqueueUpdate(fiber, update) {
         var updateQueue = fiber.updateQueue;
         if (updateQueue === null) {
@@ -15788,7 +15800,7 @@
     function getWorkInProgressRoot() {
         return workInProgressRoot;
     }
-
+    /* TODO：初始化一次`currentEventTime`，如果之前没被初始化过，则返回当前时间，初始化过，则返回`currentEventTime` */
     function requestEventTime() {
         if ((executionContext & (RenderContext | CommitContext)) !== NoContext) {
             return now();
@@ -15840,7 +15852,7 @@
         }
         return findRetryLane(currentEventWipLanes);
     }
-
+    /* TODO： */
     function scheduleUpdateOnFiber(fiber, lane, eventTime) {
         checkForNestedUpdates();
         warnAboutRenderPhaseUpdatesInDEV(fiber);
@@ -16080,7 +16092,7 @@
         suspendedLanes = removeLanes(suspendedLanes, workInProgressRootUpdatedLanes);
         markRootSuspended(root, suspendedLanes);
     }
-
+    /* TODO： */
     function performSyncWorkOnRoot(root) {
         if (!((executionContext & (RenderContext | CommitContext)) === NoContext)) {
             {
@@ -16207,7 +16219,7 @@
             }
         }
     }
-
+    /* TODO：执行更新函数，最后还原`executionContext`的原始值，并还原在其他在`update`过程中的变量 */
     function unbatchedUpdates(fn, a) {
         var prevExecutionContext = executionContext;
         executionContext &= ~BatchedContext;
@@ -17205,7 +17217,8 @@
                     throw Error("Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.");
                 }
             }
-        } {
+        } 
+        {
             if (nestedPassiveUpdateCount > NESTED_PASSIVE_UPDATE_LIMIT) {
                 nestedPassiveUpdateCount = 0;
                 error('Maximum update depth exceeded. This can happen when a component ' + "calls setState inside useEffect, but useEffect either doesn't " + 'have a dependency array, or one of the dependencies changes on every render.');
@@ -17837,7 +17850,7 @@
         }
     }
     var debugCounter = 1;
-
+    /* TODO:FiberNode对象的构造函数(tag--3,mode--0) */
     function FiberNode(tag, pendingProps, key, mode) {
         this.tag = tag;
         this.key = key;
@@ -17881,6 +17894,7 @@
             }
         }
     }
+    /* TODO：创建一个`FiberNode`，tag为3，pendingProps为null，key为null，mode为0 */
     var createFiber = function (tag, pendingProps, key, mode) {
         return new FiberNode(tag, pendingProps, key, mode);
     };
@@ -18011,6 +18025,7 @@
         return workInProgress;
     }
 
+    /* TODO：由`FiberRootNode`来创建`FiberNode`，创建的`FiberNode`的tag属性为3 */
     function createHostRootFiber(tag) {
         var mode;
         if (tag === ConcurrentRoot) {
@@ -18258,7 +18273,7 @@
         target._debugHookTypes = source._debugHookTypes;
         return target;
     }
-
+    /* TODO：用来创建`FiberRootNode`对象，这个是构造函数 */
     function FiberRootNode(containerInfo, tag, hydrate) {
         this.tag = tag;
         this.containerInfo = containerInfo;
@@ -18272,8 +18287,8 @@
         this.hydrate = hydrate;
         this.callbackNode = null;
         this.callbackPriority = NoLanePriority;
-        this.eventTimes = createLaneMap(NoLanes);
-        this.expirationTimes = createLaneMap(NoTimestamp);
+        this.eventTimes = createLaneMap(NoLanes);// TODO：创建一个长度为31的数组，并全部填充为0
+        this.expirationTimes = createLaneMap(NoTimestamp);// TODO：创建一个长度为31的数组，并全部填充为-1
         this.pendingLanes = NoLanes;
         this.suspendedLanes = NoLanes;
         this.pingedLanes = NoLanes;
@@ -18281,9 +18296,11 @@
         this.mutableReadLanes = NoLanes;
         this.finishedLanes = NoLanes;
         this.entangledLanes = NoLanes;
-        this.entanglements = createLaneMap(NoLanes); {
+        this.entanglements = createLaneMap(NoLanes);// TODO：创建一个长度为31的数组，并全部填充为0
+        {
             this.mutableSourceEagerHydrationData = null;
-        } {
+        }
+        {
             this.interactionThreadID = unstable_getThreadID();
             this.memoizedInteractions = new Set();
             this.pendingInteractionMap = new Map();
@@ -18301,7 +18318,7 @@
             }
         }
     }
-
+    /* TODO：生成`FiberRootNode`对象，并为其设置`current`属性，设置`current`属性的`stateNode`属性为`root`,为`current`属性设置queue后，最后返回`root`对象 */
     function createFiberRoot(containerInfo, tag, hydrate, hydrationCallbacks) {
         var root = new FiberRootNode(containerInfo, tag, hydrate);
         var uninitializedFiber = createHostRootFiber(tag);
@@ -18398,23 +18415,29 @@
             return hostFiber.stateNode;
         }
     }
-
+    /* TODO：用来创建FiberRoot */
     function createContainer(containerInfo, tag, hydrate, hydrationCallbacks) {
         return createFiberRoot(containerInfo, tag, hydrate);
     }
-
+    /* TODO：unbatchedUpdates函数的回调函数
+    执行钩子，获取请求时间，一些jest报警测试的检查，获取一个lane，获取内容的子树，生成`update`，最后执行`update`的顺序
+    element：react的component
+    container：root = {_internalRoot}
+    */
     function updateContainer(element, container, parentComponent, callback) {
         {
             onScheduleRoot(container, element);
         }
         var current$1 = container.current;
-        var eventTime = requestEventTime(); {
+        var eventTime = requestEventTime();
+        {
             if ('undefined' !== typeof jest) {
                 warnIfUnmockedScheduler(current$1);
                 warnIfNotScopedWithMatchingAct(current$1);
             }
         }
-        var lane = requestUpdateLane(current$1); {
+        var lane = requestUpdateLane(current$1);
+        {
             markRenderScheduled(lane);
         }
         var context = getContextForSubtree(parentComponent);
@@ -18422,7 +18445,8 @@
             container.context = context;
         } else {
             container.pendingContext = context;
-        } {
+        }
+        {
             if (isRendering && current !== null && !didWarnAboutNestedUpdates) {
                 didWarnAboutNestedUpdates = true;
                 error('Render methods should be a pure function of props and state; triggering nested component updates from render is not allowed. If necessary, trigger nested updates in componentDidUpdate.\n\nCheck the render method of %s.', getComponentName(current.type) || 'Unknown');
@@ -18731,7 +18755,7 @@
     function ReactDOMRoot(container, options) {
         this._internalRoot = createRootImpl(container, ConcurrentRoot, options);
     }
-
+    /* TODO:render->legacyCreateRootFromDOMContainer->createLegacyRoot，创建一个ReactDOMBlockingRoot对象，对象的构造函数，生成`_internalRott`属性 */
     function ReactDOMBlockingRoot(container, tag, options) {
         this._internalRoot = createRootImpl(container, tag, options);
     }
@@ -18764,14 +18788,17 @@
             unmarkContainerAsRoot(container);
         });
     };
-
+    /* TODO：为`ReactDOMBlockingRoot`对象生成`_internalRoot`属性
+    创建`root`，再由顶部生成统一的事件监听，最后返回root
+    */
     function createRootImpl(container, tag, options) {
         var hydrate = options != null && options.hydrate === true;
         var hydrationCallbacks = options != null && options.hydrationOptions || null;
         var mutableSources = options != null && options.hydrationOptions != null && options.hydrationOptions.mutableSources || null;
         var root = createContainer(container, tag, hydrate);
-        markContainerAsRoot(root.current, container);
-        var containerNodeType = container.nodeType; {
+        markContainerAsRoot(root.current, container);// TODO：生成之前`render`调用时候用来判断的其中一个属性
+        var containerNodeType = container.nodeType;
+        {
             var rootContainerElement = container.nodeType === COMMENT_NODE ? container.parentNode : container;
             listenToAllSupportedEvents(rootContainerElement);
         }
@@ -18803,11 +18830,11 @@
         warnIfReactDOMContainerInDEV(container);
         return new ReactDOMBlockingRoot(container, BlockingRoot, options);
     }
-
+    /* TODO:render->legacyCreateRootFromDOMContainer，创建一个ReactDOMBlockingRoot对象 */
     function createLegacyRoot(container, options) {
         return new ReactDOMBlockingRoot(container, LegacyRoot, options);
     }
-
+    /* TODO：判断一个DOM类型是否符合函数校验条件 */
     function isValidContainer(node) {
         return !!(node && (node.nodeType === ELEMENT_NODE || node.nodeType === DOCUMENT_NODE || node.nodeType === DOCUMENT_FRAGMENT_NODE || node.nodeType === COMMENT_NODE && node.nodeValue === ' react-mount-point-unstable '));
     }
@@ -18829,6 +18856,7 @@
     var ReactCurrentOwner$3 = ReactSharedInternals.ReactCurrentOwner;
     var topLevelUpdateWarnings;
     var warnedAboutHydrateAPI = false; {
+        /* TODO：校验DOM，要符合三种情况 */
         topLevelUpdateWarnings = function (container) {
             if (container._reactRootContainer && container.nodeType !== COMMENT_NODE) {
                 var hostInstance = findHostInstanceWithNoPortals(container._reactRootContainer._internalRoot.current);
@@ -18849,7 +18877,7 @@
             }
         };
     }
-
+    /* TODO：获取dom元素的第一个子元素 */
     function getReactRootElementInContainer(container) {
         if (!container) {
             return null;
@@ -18860,12 +18888,12 @@
             return container.firstChild;
         }
     }
-
+    /* TODO：获取元素的第一个DOM，再判断它的第一个元素是否含有`data-reactroot`属性 */
     function shouldHydrateDueToLegacyHeuristic(container) {
         var rootElement = getReactRootElementInContainer(container);
         return !!(rootElement && rootElement.nodeType === ELEMENT_NODE && rootElement.hasAttribute(ROOT_ATTRIBUTE_NAME));
     }
-
+    /* TODO：先移除dom的子元素，还有一个`data-reactroot`的逻辑，最后创建`_reactRootContainer`， */
     function legacyCreateRootFromDOMContainer(container, forceHydrate) {
         var shouldHydrate = forceHydrate || shouldHydrateDueToLegacyHeuristic(container);
         if (!shouldHydrate) {
@@ -18890,7 +18918,7 @@
             hydrate: true
         } : undefined);
     }
-
+    /* TODO：校验`callback`如果不为null的话，则要为函数类型 */
     function warnOnInvalidCallback$1(callback, callerName) {
         {
             if (callback !== null && typeof callback !== 'function') {
@@ -18898,7 +18926,7 @@
             }
         }
     }
-
+    /* TODO：针对最顶层的渲染dom进行校验，校验callback，创建`_reactRootContainer`，做树的更新，返回根部的实例 */
     function legacyRenderSubtreeIntoContainer(parentComponent, children, container, forceHydrate, callback) {
         {
             topLevelUpdateWarnings(container);
@@ -18968,6 +18996,7 @@
         return legacyRenderSubtreeIntoContainer(null, element, container, true, callback);
     }
 
+    /* TODO：校验DOM元素，校验是否被渲染过，再执行渲染进入子树*/
     function render(element, container, callback) {
         if (!isValidContainer(container)) {
             {
@@ -19085,7 +19114,8 @@
         bundleType: 1,
         version: ReactVersion,
         rendererPackageName: 'react-dom'
-    }); {
+    });
+    {
         if (!foundDevTools && canUseDOM && window.top === window.self) {
             if (navigator.userAgent.indexOf('Chrome') > -1 && navigator.userAgent.indexOf('Edge') === -1 || navigator.userAgent.indexOf('Firefox') > -1) {
                 var protocol = window.location.protocol;
