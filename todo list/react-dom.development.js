@@ -102,6 +102,7 @@
         }
     }
     var canUseDOM = !!(typeof window !== 'undefined' && typeof window.document !== 'undefined' && typeof window.document.createElement !== 'undefined');
+    /* TODO：`PropertyInfoRecord`对象的`type`属性枚举值 */
     var RESERVED = 0;
     var STRING = 1;
     var BOOLEANISH_STRING = 2;
@@ -212,6 +213,7 @@
     }
     var properties = {};
     var reservedProps = ['children', 'dangerouslySetInnerHTML', 'defaultValue', 'defaultChecked', 'innerHTML', 'suppressContentEditableWarning', 'suppressHydrationWarning', 'style'];
+    /* TODO：为`properties`生成属性，属性值都是`PropertyInfoRecord`对象 */
     reservedProps.forEach(function (name) {
         properties[name] = new PropertyInfoRecord(name, RESERVED, false, name, null, false, false)
     });
@@ -17217,7 +17219,7 @@
                     throw Error("Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.");
                 }
             }
-        } 
+        }
         {
             if (nestedPassiveUpdateCount > NESTED_PASSIVE_UPDATE_LIMIT) {
                 nestedPassiveUpdateCount = 0;
