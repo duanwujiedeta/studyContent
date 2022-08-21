@@ -1469,6 +1469,7 @@
         }
         return parentNamespace
     }
+    /* TODO：创建一个兼容性的回调函数 */
     var createMicrosoftUnsafeLocalFunction = function (func) {
         if (typeof MSApp !== 'undefined' && MSApp.execUnsafeLocalFunction) {
             return function (arg0, arg1, arg2, arg3) {
@@ -1611,6 +1612,7 @@
         return prefix + key.charAt(0).toUpperCase() + key.substring(1)
     }
     var prefixes = ['Webkit', 'ms', 'Moz', 'O'];
+    /* TODO：为`isUnitlessNumber`再生成四种不同的前缀`key`类型属性，值是`true` */
     Object.keys(isUnitlessNumber).forEach(function (prop) {
         prefixes.forEach(function (prefix) {
             isUnitlessNumber[prefixKey(prefix, prop)] = isUnitlessNumber[prop]
@@ -2796,6 +2798,7 @@
                     passiveBrowserEventsSupported = true;
                 }
             });
+            /* TODO：执行下面监听的时候，上面的`passive`对应的`get`方法会运行，`passiveBrowserEventsSupported`也会被设置为`true` */
             window.addEventListener('test', options, options);
             window.removeEventListener('test', options, options);
         } catch (e) {
@@ -3579,7 +3582,7 @@
     var DiscreteEvent = 0;
     var UserBlockingEvent = 1;
     var ContinuousEvent = 2;
-
+    /* TODO：用于创建一个含有三个属性的一个对象，并返回 */
     function makePrefixMap(styleProp, eventName) {
         var prefixes = {};
         prefixes[styleProp.toLowerCase()] = eventName.toLowerCase();
@@ -3587,12 +3590,14 @@
         prefixes['Moz' + styleProp] = 'moz' + eventName;
         return prefixes;
     }
+    /* TODO：为三个属性扩展三次属性，也就是总共9次 */
     var vendorPrefixes = {
         animationend: makePrefixMap('Animation', 'AnimationEnd'),
         animationiteration: makePrefixMap('Animation', 'AnimationIteration'),
         animationstart: makePrefixMap('Animation', 'AnimationStart'),
         transitionend: makePrefixMap('Transition', 'TransitionEnd')
     };
+    /* TODO：用来记录css对象对应的css动效的`value`值，只记录当前浏览器所支持的属性，`alienware`的`chrome`对应的属性是`animation`，没有前缀 */
     var prefixedEventNames = {};
     var style = {};
     if (canUseDOM) {
@@ -3606,7 +3611,7 @@
             delete vendorPrefixes.transitionend.transition;
         }
     }
-
+    /* 传入`vendorPrefixes`对象对应的`key`，然后返回当前浏览器所支持的属性 */
     function getVendorPrefixedEventName(eventName) {
         if (prefixedEventNames[eventName]) {
             return prefixedEventNames[eventName];
@@ -4248,6 +4253,7 @@
         }
         return lane;
     }
+    /* TODO：函数返回一个数字在转换成 32 无符号整形数字的二进制形式后，开头的 0 的个数；ex：Math.clz32(1)的结果值为`31` */
     var clz32 = Math.clz32 ? Math.clz32 : clz32Fallback;
     var log = Math.log;
     var LN2 = Math.LN2;
