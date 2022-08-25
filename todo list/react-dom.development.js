@@ -1499,11 +1499,13 @@
         }
         node.innerHTML = html
     });
+    /* TODO：用于判断`dom`元素类型的美剧 */
     var ELEMENT_NODE = 1;
     var TEXT_NODE = 3;
     var COMMENT_NODE = 8;
     var DOCUMENT_NODE = 9;
     var DOCUMENT_FRAGMENT_NODE = 11;
+    /* TODO：设置`dom`元素的`text`文本 */
     var setTextContent = function (node, text) {
         if (text) {
             var firstChild = node.firstChild;
@@ -7142,7 +7144,7 @@
         updateFiberProps(domElement, newProps);
         updateProperties(domElement, updatePayload, type, oldProps, newProps);
     }
-
+    /* TODO：设置文字内容为空 */
     function resetTextContent(domElement) {
         setTextContent(domElement, '');
     }
@@ -7150,7 +7152,7 @@
     function commitTextUpdate(textInstance, oldText, newText) {
         textInstance.nodeValue = newText;
     }
-
+    /* TODO：添加子元素 */
     function appendChild(parentInstance, child) {
         parentInstance.appendChild(child);
     }
@@ -7843,6 +7845,7 @@
     var LegacyRoot = 0;
     var BlockingRoot = 1;
     var ConcurrentRoot = 2;
+
     var rendererID = null;
     var injectedHook = null;
     var hasLoggedError = false;
@@ -7953,7 +7956,7 @@
     var immediateQueueCallbackNode = null;
     var isFlushingSyncQueue = false;
     var initialTimeMs$1 = Scheduler_now$1();
-    /* TODO：now是`React`库中的一个方法，借助`performance`来生成一个时间 */
+    /* TODO：now是`React`库中的一个方法，借助`performance`来生成一个时间，毫秒，表示程序启动到运行到此处的时间 */
     var now = initialTimeMs$1 < 10000 ? Scheduler_now$1 : function () {
         return Scheduler_now$1() - initialTimeMs$1
     };
@@ -15345,7 +15348,7 @@
             fiber._debugOwner = null;
         }
     }
-
+    /* TODO：向上拿取`fiber`，返回`tag`值为`3、4、5`类型的`fiber` */
     function getHostParentFiber(fiber) {
         var parent = fiber.return;
         while (parent !== null) {
@@ -15359,11 +15362,11 @@
             }
         }
     }
-
+    /* TODO：校验`fiber`的`tag`类型是否为`3、4、5` */
     function isHostParent(fiber) {
         return fiber.tag === HostComponent || fiber.tag === HostRoot || fiber.tag === HostPortal;
     }
-
+    /* TODO：针对当前的`fiber`来寻找它的后一个元素，并做`return`指向，逻辑还是不清晰 */
     function getHostSibling(fiber) {
         var node = fiber;
         siblings: while (true) {
@@ -15419,7 +15422,7 @@
         }
         if (parentFiber.flags & ContentReset) {
             resetTextContent(parent);
-            parentFiber.flags &= ~ContentReset;
+            parentFiber.flags &= ~ContentReset;/* TODO：针对`flags`为`ContentReset`的做删除还原动作 */
         }
         var before = getHostSibling(finishedWork);
         if (isContainer) {
@@ -15428,7 +15431,9 @@
             insertOrAppendPlacementNode(finishedWork, before, parent);
         }
     }
-
+    /* TODO：含有递归动作，`Fiber.tag`为`5 6`的则是可以直接使用的`dom`元素，其他的是在内存中的，需要取出子元素进行递归处理
+    TODO：`stateNode`和`stateNode.instance`是一个`dom`的实例
+    */
     function insertOrAppendPlacementNodeIntoContainer(node, before, parent) {
         var tag = node.tag;
         var isHost = tag === HostComponent || tag === HostText;
@@ -15452,7 +15457,7 @@
             }
         }
     }
-
+    /* TODO：用来插入或者添加元素 */
     function insertOrAppendPlacementNode(node, before, parent) {
         var tag = node.tag;
         var isHost = tag === HostComponent || tag === HostText;
@@ -15757,8 +15762,10 @@
     var RootSuspendedWithDelay = 4;
     var RootCompleted = 5;
     var executionContext = NoContext;
+
+    /* TODO：被调整顺序后的`FiberRootNode`，用于后续`dom`的构建等 */
     var workInProgressRoot = null;
-    var workInProgress = null;
+    var workInProgress = null;/* TODO：FiberRootNode.current */
     var workInProgressRootRenderLanes = NoLanes;
     var subtreeRenderLanes = NoLanes;
     var subtreeRenderLanesCursor = createCursor(NoLanes);
@@ -17314,6 +17321,7 @@
         }
     }
     var beginWork$1; {
+        /* TODO：一个`FiberNode`对象 */
         var dummyFiber = null;
         beginWork$1 = function (current, unitOfWork, lanes) {
             var originalWorkInProgressCopy = assignFiberPropertiesInDEV(dummyFiber, unitOfWork);
@@ -17934,7 +17942,7 @@
         }
         return IndeterminateComponent;
     }
-
+    /* TODO：传入`current`来初始化`workInProgress` */
     function createWorkInProgress(current, pendingProps) {
         var workInProgress = current.alternate;
         if (workInProgress === null) {
@@ -18241,7 +18249,7 @@
         };
         return fiber;
     }
-
+    /* TODO：从`source（workInProgress）`拷贝属性，生成`originalWorkInProgressCopy` */
     function assignFiberPropertiesInDEV(target, source) {
         if (target === null) {
             target = createFiber(IndeterminateComponent, null, null, NoMode);
@@ -18434,6 +18442,7 @@
     */
     function updateContainer(element, container, parentComponent, callback) {
         {
+            /* TODO：`react-devtools`的扩展，https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi */
             onScheduleRoot(container, element);
         }
         var current$1 = container.current;
@@ -18869,6 +18878,7 @@
             if (container._reactRootContainer && container.nodeType !== COMMENT_NODE) {
                 var hostInstance = findHostInstanceWithNoPortals(container._reactRootContainer._internalRoot.current);
                 if (hostInstance) {
+                    /* TODO：被非`react`删除导致的报错 */
                     if (hostInstance.parentNode !== container) {
                         error('render(...): It looks like the React-rendered content of this container was removed without using React. This is not supported and will cause errors. Instead, call ReactDOM.unmountComponentAtNode to empty a container.');
                     }
@@ -18877,9 +18887,11 @@
             var isRootRenderedBySomeReact = !!container._reactRootContainer;
             var rootEl = getReactRootElementInContainer(container);
             var hasNonRootReactChild = !!(rootEl && getInstanceFromNode(rootEl));
+            /* TODO：被渲染的元素的子元素中含有被渲染过的处理 */
             if (hasNonRootReactChild && !isRootRenderedBySomeReact) {
                 error('render(...): Replacing React-rendered children with a new root component. If you intended to update the children of this node, you should instead have the existing children update their state and render the new components instead of calling ReactDOM.render.');
             }
+            /* TODO：不鼓舞渲染到`body`中，因为有很多其他第三方的脚本等都会用到`body` */
             if (container.nodeType === ELEMENT_NODE && container.tagName && container.tagName.toUpperCase() === 'BODY') {
                 error('render(): Rendering components directly into document.body is discouraged, since its children are often manipulated by third-party scripts and browser extensions. This may lead to subtle reconciliation issues. Try rendering into a container element created for your app.');
             }
@@ -18938,6 +18950,7 @@
     function legacyRenderSubtreeIntoContainer(parentComponent, children, container, forceHydrate, callback) {
         {
             topLevelUpdateWarnings(container);
+            /* TODO：传递不是函数的`callback`时的报错 */
             warnOnInvalidCallback$1(callback === undefined ? null : callback, 'render');
         }
         var root = container._reactRootContainer;
@@ -19006,12 +19019,12 @@
 
     /* TODO：校验DOM元素，校验是否被渲染过，再执行渲染进入子树*/
     function render(element, container, callback) {
-        if (!isValidContainer(container)) {
+        if (!isValidContainer(container)) {/* TODO：如果不是`dom`的化则会报错 */
             {
                 throw Error("Target container is not a DOM element.");
             }
         } {
-            var isModernRoot = isContainerMarkedAsRoot(container) && container._reactRootContainer === undefined;
+            var isModernRoot = isContainerMarkedAsRoot(container) && container._reactRootContainer === undefined;/* TODO：调用了`unstable_createRoot`方法之后，再调用`render`方法则会出下面的警告 */
             if (isModernRoot) {
                 error('You are calling ReactDOM.render() on a container that was previously passed to ReactDOM.createRoot(). This is not supported. Did you mean to call root.render(element)?');
             }
