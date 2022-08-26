@@ -15882,6 +15882,7 @@
     function scheduleUpdateOnFiber(fiber, lane, eventTime) {
         checkForNestedUpdates();
         warnAboutRenderPhaseUpdatesInDEV(fiber);
+        /* TODO：用来同意设置fiber的lane属性，并返回`ReactDOMBlockingRoot` */
         var root = markUpdateLaneFromFiberToRoot(fiber, lane);
         if (root === null) {
             warnAboutUpdateOnUnmountedFiberInDEV(fiber);
@@ -15922,7 +15923,7 @@
         }
         mostRecentlyUpdatedRoot = root;
     }
-
+    /* TODO：用来同意设置fiber的lane属性 */
     function markUpdateLaneFromFiberToRoot(sourceFiber, lane) {
         sourceFiber.lanes = mergeLanes(sourceFiber.lanes, lane);
         var alternate = sourceFiber.alternate;
@@ -17335,6 +17336,7 @@
         /* TODO：一个`FiberNode`对象 */
         var dummyFiber = null;
         beginWork$1 = function (current, unitOfWork, lanes) {
+            /* TODO：从`unitOfWork`也就是（workInProgress）中复制的一个对象 */
             var originalWorkInProgressCopy = assignFiberPropertiesInDEV(dummyFiber, unitOfWork);
             try {
                 return beginWork(current, unitOfWork, lanes);
