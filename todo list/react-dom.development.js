@@ -75,22 +75,28 @@
     var enableFundamentalAPI = false;
     var enableNewReconciler = false;
     var warnAboutStringRefs = false;
+    /* TODO：一个`Set`对象，用来存储所有事件的枚举（如：`['click','focus','copy']` */
     var allNativeEvents = new Set();
+    /* TODO：一个对象，用来存储事件对象，`key`值（如：`onClick`、`onCancelCapture`），`value`值(如：`['click']`、`['cancel']`) */
     var registrationNameDependencies = {};
+    /* TODO：一个对象，用来储存事件对象，`key`值（如：`onclick`、`oncancelcapture`），`value`值（如：`onClick`、`['cancel']`） */
     var possibleRegistrationNames = {};
 
+    /* TODO：一个过度的转化函数，参数`registrationName`的类型（如：`onClick`），`dependencies`的类型（如：`['click']`） */
     function registerTwoPhaseEvent(registrationName, dependencies) {
         registerDirectEvent(registrationName, dependencies);
         registerDirectEvent(registrationName + 'Capture', dependencies)
     }
 
+    /* TODO：一个过度的转化函数，参数`registrationName`的类型（如：`onClick`），`dependencies`的类型（如：`['click']`） */
     function registerDirectEvent(registrationName, dependencies) {
         {
             if (registrationNameDependencies[registrationName]) {
                 error('EventRegistry: More than one plugin attempted to publish the same registration name, `%s`.', registrationName)
             }
         }
-        registrationNameDependencies[registrationName] = dependencies; {
+        registrationNameDependencies[registrationName] = dependencies;
+        {
             var lowerCasedName = registrationName.toLowerCase();
             possibleRegistrationNames[lowerCasedName] = registrationName;
             if (registrationName === 'onDoubleClick') {
@@ -3630,9 +3636,12 @@
     var ANIMATION_ITERATION = getVendorPrefixedEventName('animationiteration');
     var ANIMATION_START = getVendorPrefixedEventName('animationstart');
     var TRANSITION_END = getVendorPrefixedEventName('transitionend');
+    /* TODO：一个`Map`对象，`key`是事件（如：`cancel`），`value`是相应的值(如：`onCancel`)的一个存储map */
     var topLevelEventsToReactNames = new Map();
+    /* TODO：一个`Map`对象，`key`是事件（如：`cancel`），`value`是 0、 1、 2 三个枚举值 */
     var eventPriorities = new Map();
     var discreteEventPairsForSimpleEventPlugin = ['cancel', 'cancel', 'click', 'click', 'close', 'close', 'contextmenu', 'contextMenu', 'copy', 'copy', 'cut', 'cut', 'auxclick', 'auxClick', 'dblclick', 'doubleClick', 'dragend', 'dragEnd', 'dragstart', 'dragStart', 'drop', 'drop', 'focusin', 'focus', 'focusout', 'blur', 'input', 'input', 'invalid', 'invalid', 'keydown', 'keyDown', 'keypress', 'keyPress', 'keyup', 'keyUp', 'mousedown', 'mouseDown', 'mouseup', 'mouseUp', 'paste', 'paste', 'pause', 'pause', 'play', 'play', 'pointercancel', 'pointerCancel', 'pointerdown', 'pointerDown', 'pointerup', 'pointerUp', 'ratechange', 'rateChange', 'reset', 'reset', 'seeked', 'seeked', 'submit', 'submit', 'touchcancel', 'touchCancel', 'touchend', 'touchEnd', 'touchstart', 'touchStart', 'volumechange', 'volumeChange'];
+    /* TODO：该数组只是给`eventPriorities`添加了属性，值为`0`的作用 */
     var otherDiscreteEvents = ['change', 'selectionchange', 'textInput', 'compositionstart', 'compositionend', 'compositionupdate'];
     var userBlockingPairsForSimpleEventPlugin = ['drag', 'drag', 'dragenter', 'dragEnter', 'dragexit', 'dragExit', 'dragleave', 'dragLeave', 'dragover', 'dragOver', 'mousemove', 'mouseMove', 'mouseout', 'mouseOut', 'mouseover', 'mouseOver', 'pointermove', 'pointerMove', 'pointerout', 'pointerOut', 'pointerover', 'pointerOver', 'scroll', 'scroll', 'toggle', 'toggle', 'touchmove', 'touchMove', 'wheel', 'wheel'];
     var continuousPairsForSimpleEventPlugin = ['abort', 'abort', ANIMATION_END, 'animationEnd', ANIMATION_ITERATION, 'animationIteration', ANIMATION_START, 'animationStart', 'canplay', 'canPlay', 'canplaythrough', 'canPlayThrough', 'durationchange', 'durationChange', 'emptied', 'emptied', 'encrypted', 'encrypted', 'ended', 'ended', 'error', 'error', 'gotpointercapture', 'gotPointerCapture', 'load', 'load', 'loadeddata', 'loadedData', 'loadedmetadata', 'loadedMetadata', 'loadstart', 'loadStart', 'lostpointercapture', 'lostPointerCapture', 'playing', 'playing', 'progress', 'progress', 'seeking', 'seeking', 'stalled', 'stalled', 'suspend', 'suspend', 'timeupdate', 'timeUpdate', TRANSITION_END, 'transitionEnd', 'waiting', 'waiting'];
@@ -3648,7 +3657,7 @@
             registerTwoPhaseEvent(reactName, [topEvent]);
         }
     }
-
+    /* TODO：`eventTypes`是一个数组，`priority`值为`0` */
     function setEventPriorities(eventTypes, priority) {
         for (var i = 0; i < eventTypes.length; i++) {
             eventPriorities.set(eventTypes[i], priority);
@@ -4528,6 +4537,7 @@
         });
         return SyntheticBaseEvent;
     }
+    /* TODO：给`createSyntheticEvent`函数创建高阶函数的的参数，让它的返回值在 new 初始化的时候，能够直接继承属性 */
     var EventInterface = {
         eventPhase: 0,
         bubbles: 0,
@@ -4538,6 +4548,7 @@
         defaultPrevented: 0,
         isTrusted: 0
     };
+    /* TODO：创建一个高阶函数，初始化的时候会继承`EventInterface`对象 */
     var SyntheticEvent = createSyntheticEvent(EventInterface);
     var UIEventInterface = _assign({}, EventInterface, {
         view: 0,
@@ -4995,7 +5006,7 @@
         }
         return false;
     }
-
+    /* TODO：用来校验DOM的事件是否存在，`eventNameSuffix`的参数如：`input` */
     function isEventSupported(eventNameSuffix) {
         if (!canUseDOM) {
             return false;
@@ -7625,7 +7636,7 @@
         fiberStack = [];
     }
     var index = -1;
-
+    /* TODO：传递一个值，返回一个带`current`属性的对象 */
     function createCursor(defaultValue) {
         return {
             current: defaultValue
